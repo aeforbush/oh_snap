@@ -1,3 +1,4 @@
+// this file contains the statement that attaches the React components to the DOM
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
