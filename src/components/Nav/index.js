@@ -1,21 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { capitalizeFirstLetter } from "../../utils/helpers";
 
-function Nav() {
-  const categories = [
-    { name: "commercial", description: "Photos of grocery stores, food trucks, and other commercial projects" },
-    { name: "portraits", description: "Portraits of people in my life" },
-    { name: "food", description: "Delicious delicacies" },
-    {
-      name: "landscape", description: "Fields, farmhouses, waterfalls, and the beauty of nature" },
-  ];
-  function categorySelected(name) {
-    console.log(`${name} clicked`);
-  }
+function Nav(props) {
+  const { categories = [], setCurrentCategory, currentCategory } = props;
+  useEffect(() => {
+    document.title = capitalizeFirstLetter(currentCategory.name);
+  }, [currentCategory]);
   return (
-    <header>
+    <header className="flex-row px-1">
       <h2>
         <a data-testid="link" href="/">
           <span role="img" aria-label="camera">
+            {" "}
             📸
           </span>{" "}
           Oh Snap!
@@ -24,16 +20,24 @@ function Nav() {
       <nav>
         <ul className="flex-row">
           <li className="mx-2">
-            <a data-testid="about" href="#about" onClick={() => categorySelected()}>About Me</a>
+            <a href="#about">About me</a>
           </li>
-          <li className={"mx-2"}>
-            <span onClick={() => categorySelected()}>Contact</span>
+          <li>
+            <span>Contact</span>
           </li>
           {categories.map((category) => (
-            // whenever mapping over anything in JSX you must have a key which is often an "id"
-            <li className="mx-1" key={category.name}>
-              <span onClick={() => categorySelected(category.name)}>
-                {category.name}
+            <li
+              className={`mx-1 ${
+                currentCategory.name === category.name && "navActive"
+              }`}
+              key={category.name}
+            >
+              <span
+                onClick={() => {
+                  setCurrentCategory(category);
+                }}
+              >
+                {capitalizeFirstLetter(category.name)}
               </span>
             </li>
           ))}
