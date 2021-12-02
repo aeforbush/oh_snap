@@ -1,48 +1,90 @@
 import React, { useState } from "react";
+import { validateEmail } from "../../utils/helpers";
 
 function ContactForm() {
-    // below is the hook that manages form data
-    // set the state to empty strings
-    const [formState, setFormState] = useState({ name: '', email: '', message: ''});
-    // destructuring the formState object into its named properties
-    const { name, email, message } = formState;
+  // below is the hook that manages form data
+  // set the state to empty strings
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  // destructuring the formState object into its named properties
+  // hook to handle error state
+  const [errorMessage, setErrorMessage] = useState("");
+  const { name, email, message } = formState;
 
-    // handleChange function || onChange event listner will ensure that the handleChange function fires whenever a keystroke is typed into the field
-    // The name property of target in the preceding expression actually refers to the name attribute of the form element. This attribute value matches the property names of formState (name, email, and message) and allows us to use [ ] to create dynamic property names.We use the spread operator, ...formState, so we can retain the other key-value pairs in this object. Without the spread operator, the formState object would be overwritten to only contain the name: value key pair.
-    function handleChange(e) {
-        setFormState({...formState, [e.target.name]: e.target.value })
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!errorMessage) {
+      setFormState({ [e.target.name]: e.target.value });
+      console.log("Form", formState);
     }
-    // console.log(formState);
+  };
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        console.log(formState);
+  // handleChange function || onBlur event listner will ensure that the handleChange function fires whenever a keystroke is typed into the field
+
+  const handleChange = (e) => {
+    if (e.target.name === "email") {
+      const isValid = validateEmail(e.target.value);
+      if (!isValid) {
+        setErrorMessage("Your email is invalid.");
+      } else {
+        setErrorMessage("");
+      }
+    } else {
+      if (!e.target.value.length) {
+        setErrorMessage(`${e.target.name} is required.`);
+      } else {
+        setErrorMessage("");
+      }
     }
-    // create DOM elements using JSX
-    return(
-        <section>
-            <h1>Contact me</h1>
-            <form id="contact-form" onSubmit={handleSubmit}>
-                {/*each form element gets wrapped in a div*/}
-                {/* htmlFor is a keyword reserved in js */}
-                <div>
-                    <label htmlFor="name">Name:</label>
-                    <input type="text" defaultValue={name} onChange={handleChange} name="name" />
-                </div>
-                <div>
-                    <label htmlFor="email">Email Address:</label>
-                    <input type="email" defaultValue={email} onChange={handleChange} name="email" />
-                </div>
-                <div>
-                    <label htmlFor="message">Message:</label>
-                    <textarea name="message" defaultValue={message} onChange={handleChange} rows="5" />
-                </div>
-                <button type="submit">Submit</button>
-            </form>
-        </section>
-    )
+  };
+
+  // create DOM elements using JSX
+  return (
+    <section>
+      <h1 data-testid="h1tag">Contact me</h1>
+      <form id="contact-form" onSubmit={handleSubmit}>
+        {/*each form element gets wrapped in a div*/}
+        {/* htmlFor is a keyword reserved in js */}
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input
+            type="text"
+            defaultValue={name}
+            onBlur={handleChange}
+            name="name"
+          />
+        </div>
+        <div>
+          <label htmlFor="email">Email Address:</label>
+          <input
+            type="email"
+            defaultValue={email}
+            onBlur={handleChange}
+            name="email"
+          />
+        </div>
+        <div>
+          <label htmlFor="message">Message:</label>
+          <textarea
+            name="message"
+            defaultValue={message}
+            onBlur={handleChange}
+            rows="5"
+          />
+        </div>
+        {errorMessage && (
+          <div>
+            <p className="error-text">{errorMessage}</p>
+          </div>
+        )}
+        <button data-testid="button" type="submit">Submit</button>
+      </form>
+    </section>
+  );
 }
-
 
 // name of function needs to be the export
 export default ContactForm;
