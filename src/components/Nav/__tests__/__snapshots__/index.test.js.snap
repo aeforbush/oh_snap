@@ -14,7 +14,7 @@ exports[`Nav component matches snapshot 1`] = `
           aria-label="camera"
           role="img"
         >
-           📸
+          📸
         </span>
          Oh Snap!
       </a>
@@ -27,21 +27,17 @@ exports[`Nav component matches snapshot 1`] = `
           class="mx-2"
         >
           <a
+            data-testid="link"
             href="#about"
           >
             About me
           </a>
         </li>
-        <li>
-          <span>
-            Contact
-          </span>
-        </li>
         <li
-          class="mx-1 false"
+          class="mx-2"
         >
           <span>
-            Portraits
+            Contact
           </span>
         </li>
       </ul>
