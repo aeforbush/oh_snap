@@ -1,8 +1,10 @@
 // this is a child component to the Gallery component that will now handle the photo rendering
 import React, { useState } from 'react'
-// import Modal from '../Modal';
+import Modal from '../Modal';
 // import photo from '../../assets/small/commercial/0.jpg';
 
+// set to false so that the modal only opens when a user has clicked on an image
+const [isModalOpen, setIsModalOpen] = useState(false);
 
 const PhotoList = ({ category }) => {
     const [photos] = useState([
@@ -104,13 +106,24 @@ const PhotoList = ({ category }) => {
       ]);
 
       const currentPhotos = photos.filter((photo) => photo.category === category);
+      const [currentPhoto, setCurrentPhoto] = useState();
+
+      const toggleModal = (image, i) => {
+        // updating the current photo state with data retreived through the click event
+        setCurrentPhoto({...image, index: i})
+        // clickhandler to render the modal
+        setIsModalOpen(true);
+      }
+
   return (
     <div>
+      {isModalOpen && <Modal currentPhoto={currentPhoto}/>}
         <div className="flex-row">
             {currentPhotos.map((image, i) => (
                 <img src={require(`../../assets/small/${category}/${i}.jpg`).default}
                 alt={image.name}
                 className="img-thumbnail mx-1"
+                onClick={() => toggleModal(image, i)}
                 key={image.name}
                 />
             ))}
