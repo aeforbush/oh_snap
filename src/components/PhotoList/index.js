@@ -4,9 +4,9 @@ import Modal from '../Modal';
 // import photo from '../../assets/small/commercial/0.jpg';
 
 // set to false so that the modal only opens when a user has clicked on an image
-const [isModalOpen, setIsModalOpen] = useState(false);
 
 const PhotoList = ({ category }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
     const [photos] = useState([
         {
           name: 'Grocery aisle',
@@ -112,12 +112,12 @@ const PhotoList = ({ category }) => {
         // updating the current photo state with data retreived through the click event
         setCurrentPhoto({...image, index: i})
         // clickhandler to render the modal
-        setIsModalOpen(true);
+        setIsModalOpen(!isModalOpen);
       }
 
   return (
     <div>
-      {isModalOpen && <Modal currentPhoto={currentPhoto}/>}
+      {isModalOpen && <Modal currentPhoto={currentPhoto} onClose={toggleModal}/>}
         <div className="flex-row">
             {currentPhotos.map((image, i) => (
                 <img src={require(`../../assets/small/${category}/${i}.jpg`).default}
